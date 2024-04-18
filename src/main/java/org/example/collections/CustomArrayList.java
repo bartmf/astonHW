@@ -5,12 +5,30 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class CustomArrayList implements List {
+public class CustomArrayList <T extends Comparable<T>> implements List {
     private int size;
-    private
+    private final T[] elements;
+
+    public CustomArrayList (){
+        elements = (T[]) new Object[16];
+    }
+
+
+//    public CustomArrayList(int startCount) {
+//        elements = (T[]) new Object[startCount];
+//    }
+    public CustomArrayList (Collection<T> collection) {
+        T[] array = (T[]) collection.toArray();
+        elements = (T[]) new Object[collection.size()];
+        for (int i = 0; i < collection.size(); i++){
+            elements[i] = array[i];
+            size++;
+        }
+    }
+
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -30,11 +48,17 @@ public class CustomArrayList implements List {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return elements.clone();
     }//Заглушка
 
     @Override
     public boolean add(Object o) {
+        if(size == elements.length){
+            T[] newElements = (T[])new Object[elements.length + (elements.length / 2)];
+
+        }else{
+
+        }
         return false;
     }
 
@@ -55,28 +79,32 @@ public class CustomArrayList implements List {
 
     @Override
     public void clear() {
-
+        for(int i = size-1; i >= 0; i--){
+            elements[i] = null;
+        }
     }
 
     @Override
     public Object get(int index) {
-        return null;
+        return elements[index];
     }
 
     @Override
     public Object set(int index, Object element) {
-        return null;
+        T oldElement = elements[index];
+        elements[index] = (T) element;
+        return oldElement;
     }//Заглушка
 
     @Override
     public void add(int index, Object element) {
-
-    }
+        elements[index] = (T) element;
+    }//in work
 
     @Override
     public Object remove(int index) {
         return null;
-    }
+    }//in work
 
     @Override
     public int indexOf(Object o) {
@@ -122,4 +150,8 @@ public class CustomArrayList implements List {
     public Object[] toArray(Object[] a) {
         return new Object[0];
     }
+
+    static public void sort(){
+
+    }//залушка
 }
