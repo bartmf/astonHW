@@ -87,7 +87,11 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
 
     @Override
     public Object get(int index) {
-        return elements[index];
+        if(index > 0 && index < size) {
+            return elements[index];
+        }else{
+            return null;
+        }
     }
 
     @Override
