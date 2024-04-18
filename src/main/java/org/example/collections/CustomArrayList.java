@@ -15,12 +15,13 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
 //        elements = (T[]) new Object[startCount];
 //    }
     public CustomArrayList (Collection<T> collection) {
-        T[] array = (T[]) collection.toArray();
-        elements = (T[]) new Object[collection.size()];
-        for (int i = 0; i < collection.size(); i++){
-            elements[i] = array[i];
-            size++;
-        }
+//        T[] array = (T[]) collection.toArray();
+//        elements = (T[]) new Object[collection.size()];
+//        for (int i = 0; i < collection.size(); i++){
+//            elements[i] = array[i];
+//            size++;
+//        }
+        elements = Arrays.copyOf((T[])collection.toArray(), collection.size()-1);
     }
 
     @Override
