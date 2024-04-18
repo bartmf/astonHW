@@ -1,9 +1,6 @@
 package org.example.collections;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class CustomArrayList <T extends Comparable<T>> implements List {
     private int size;
@@ -54,12 +51,15 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
     @Override
     public boolean add(Object o) {
         if(size == elements.length){
-            T[] newElements = (T[])new Object[elements.length + (elements.length / 2)];
-
-        }else{
-
+            T[] newElements = Arrays.copyOf(elements, elements.length + (elements.length) >> 1);
         }
-        return false;
+        try {
+            elements[size] = (T) o;
+        }catch (Exception e){
+            return false;
+        }
+        size++;
+        return true;
     }
 
     @Override
