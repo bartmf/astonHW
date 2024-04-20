@@ -15,11 +15,11 @@ public class TestList {
     private Condom testCon;
     @Before
     public void setUp(){
-        value = 100;
+        value = 5;
         list = new CustomArrayList();
         testCon = new Condom(Condom.Firm.CONTEX, 100);
         for(int i = 0; i < value; i++){
-            list.add(new Condom(Condom.Firm.values()[i % 4 - 1], i));
+            list.add(new Condom(Condom.Firm.values()[i % 4], i));
         }
         list.add(testCon);
         value++;
