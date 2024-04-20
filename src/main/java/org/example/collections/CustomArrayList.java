@@ -99,12 +99,24 @@ public class CustomArrayList <T> implements List {
 
     @Override
     public boolean addAll(Collection c) {
-        return false;
+        Object[] arr = c.toArray();
+        for(Object o : arr){
+            this.add(o);
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection c) {
-        return false;
+        if(checkIndex(index)) {
+            Object[] arr = c.toArray();
+            for (int i = index; i < size; i++) {
+                this.add(i, arr[i]);
+            }
+            return true;
+        }else {
+            throw new ArrayIndexOutOfBoundsException();
+        }
     }
 
     @Override
@@ -132,7 +144,14 @@ public class CustomArrayList <T> implements List {
 
     @Override
     public Object remove(int index) {
-        return null;
+        if(checkIndex(index)){
+            Object oldElem = elements[index];
+            System.arraycopy(elements, index + 1, elements, index,size - 1 - index);
+            size--;
+            return oldElem;
+        }else{
+            throw new ArrayIndexOutOfBoundsException();
+        }
     }
 
     @Override
