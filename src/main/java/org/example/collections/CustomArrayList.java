@@ -2,9 +2,9 @@ package org.example.collections;
 
 import java.util.*;
 
-public class CustomArrayList <T extends Comparable<T>> implements List {
+public class CustomArrayList <T> implements List {
     private int size;
-    private final T[] elements;
+    private T[] elements;
 
     public CustomArrayList (){
         elements = (T[]) new Object[16];
@@ -14,14 +14,14 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
 //    public CustomArrayList(int startCount) {
 //        elements = (T[]) new Object[startCount];
 //    }
-    public CustomArrayList (Collection<T> collection) {
+    public CustomArrayList (Collection<? extends T> collection) {
 //        T[] array = (T[]) collection.toArray();
 //        elements = (T[]) new Object[collection.size()];
 //        for (int i = 0; i < collection.size(); i++){
 //            elements[i] = array[i];
 //            size++;
 //        }
-        elements = Arrays.copyOf((T[])collection.toArray(), collection.size()-1);
+        this.elements = Arrays.copyOf((T[])collection.toArray(), collection.size());
     }
 
     @Override
@@ -52,19 +52,48 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
     @Override
     public boolean add(Object o) {
         if(size == elements.length){
-            T[] newElements = Arrays.copyOf(elements, elements.length + (elements.length) >> 1);
+            elements = Arrays.copyOf(elements, elements.length + (elements.length) >> 1);
         }
         try {
             elements[size] = (T) o;
+            size++;
+            return true;
         }catch (Exception e){
+            System.out.println(e);
             return false;
         }
-        size++;
-        return true;
     }
 
     @Override
+    public void add(int index, Object element) {
+        if(checkIndex(index)){
+            if (size == elements.length){
+                elements = Arrays.copyOf(elements, elements.length +(elements.length >> 1));
+            }
+            for(int i = size; i > index; i--){
+                elements[i] = elements[i - 1];
+            }
+            if (size - index >= 0){
+                System.arraycopy(elements, index, elements, index + 1, size - index);
+            }
+            elements[index] = (T)element;
+            size++;
+        }else{
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
+    }//in work
+
+    @Override
     public boolean remove(Object o) {
+        for (int i = 0; i < size; i++){
+            if(elements[i].equals(o)){
+                swapArray(i);
+                elements[size-1] = null;
+                size--;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -87,10 +116,10 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
 
     @Override
     public Object get(int index) {
-        if(index > 0 && index < size) {
+        if(checkIndex(index)) {
             return elements[index];
         }else{
-            return null;
+            throw new ArrayIndexOutOfBoundsException();
         }
     }
 
@@ -99,17 +128,12 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
         T oldElement = elements[index];
         elements[index] = (T) element;
         return oldElement;
-    }//Заглушка
-
-    @Override
-    public void add(int index, Object element) {
-        elements[index] = (T) element;
-    }//in work
+    }
 
     @Override
     public Object remove(int index) {
         return null;
-    }//in work
+    }
 
     @Override
     public int indexOf(Object o) {
@@ -156,7 +180,21 @@ public class CustomArrayList <T extends Comparable<T>> implements List {
         return new Object[0];
     }
 
-    static public void sort(){
-
-    }//залушка
+    static public <T extends Comparable<T>>void sort(List<T> collection){
+        for (int i = collection.size() - 1; i >= 1; i--){
+            for (int j = 0; j < i; j++){
+                if (collection.get(j).compareTo(collection.get(j + 1)) > 0){
+                    T temp = collection.get(j);
+                    collection.set(j, collection.get(j + 1));
+                    collection.set(j + 1, temp);
+                }
+            }
+        }
+    }
+    private void swapArray(int index){
+        System.arraycopy(elements,index, elements, index - 1, size - index);
+    }
+    private boolean checkIndex(int index){
+        return index >= 0 && index < size;
+    }
 }
